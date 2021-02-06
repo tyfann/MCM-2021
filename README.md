@@ -44,3 +44,88 @@
 
 [2] LeCun Y, Bottou L, Bengio Y, et al. Gradient-based learning applied to document recognition[J]. Proceedings of the IEEE, 1998, 86(11): 2278-2324.
 
+
+# TTP Model
+
+## 符号定义：
+
+| symbol     | meaning                                            |
+| ---------- | -------------------------------------------------- |
+| R          | all resource department owns                       |
+| t          | time effect factor                                 |
+| To         | topographic                                        |
+| lo         | longitude                                          |
+| la         | latitude                                           |
+| Po         | population                                         |
+| $t_d$      | Detect Date                                        |
+| $t_l$      | the latest Date of positive ID detect in this area |
+| p          | possibility of unverified becoming possitive ID    |
+| $\alpha$   | the enhanced weight of positive ID                 |
+| $\Delta d$ | the distance of two area(space effect factor)      |
+| $\Delta t$ | time bias(should be positive)                      |
+| $r_i$      | the amount of resource each area will get          |
+| $w_i$      | the weight of i area(importance)                   |
+| isP        | if id is positive, then isP=1, else isP=0          |
+|            |                                                    |
+|            |                                                    |
+|            |                                                    |
+|            |                                                    |
+
+## 模型定义：
+
+TTP model is based on variables including time, topographic and population.
+
+topographic depends on location, which is related to longitude and latitude.
+
+First, we concern about the evolution of the positive ID's distribution.
+
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne3xk50zxj30rd0elasv.jpg width=85%>
+
+<center>Figure 1 positive ID distribution before 2020</center>
+
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne41ev84lj30rd0elkbc.jpg width=85%>
+
+<center>Figure 2 positive ID distribution after 2020</center>
+
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne55ymfaxj30a907cmx0.jpg width=85%>
+
+<center>Figure 3 Detect Date of positive ID</center>
+
+we can find from the heat map that positive ID's location is being changed from time to time, so we give time as a factor t, if the latest positive ID detect time is far from current, then t will become less and if the latest positive ID detect time is close to now, then t will become greater which means this place has higher priority to allocate resouce.
+
+Secondly, we find from the paper that Vespa mandarinia typically build their nests inside of natural cavities such as hollow trees and sometimes inside the walls of buildings, so we divide terrain types into four terrains: plateau, mountain, plain and valley. And we give these four types different weights "To".
+
+Finally, due to the risk of human being attacked by Vespa mandarinia, we concentrate on the population density of Washington state, and we give population as a factor 'Po', 'Po' becomes greater if the place is densely populated.
+
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne3ou9hz0j30jg0b4n0t.jpg width=85%>
+
+
+
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne3jkf272j30rd0eldj1.jpg width=85%>
+
+## Model formula
+
+As mentioned above, there are three impact factors, and then we give the interpretation formula(which is the resource distribution formula as well):
+
+$\Large r_i = \frac{w_i}{\sum_{i=1}^{n} w_i}$
+
+$w_i = isP * (\alpha * \Delta t* \Delta d) + (1-isP)*(p_i * \alpha)$
+
+$p_i =  \Delta t_i * \Delta d_i$ (when isP=0)
+
+And then we set a loss function which will evaluate the model.Loss function is a finance evaluation model which will evaluate the economics loss of Washington State (contains the agricultural loss and society loss)
+
+$Loss = $
+
+## 主要策略：
+
+1. 被实验室判定为Negative ID的直接忽略
+2. 被实验室判定为Positive ID的需要重点调配资源(相同时间detect则平均分配，如果时间发生的离现在)
+3. 被判定为Unprocessed的也先忽略，但如果在后续模型判定中Unprocessed的所处的地区是可能需要调配资源的地区的话，需要被纳入考虑范围
+4. 被判定为Unverified的区域，根据模型所给出的权重进行排序，根据排序将剩余的可用资源进行依次调配
+
+
+
+resource website:
+
+https://commons.wikimedia.org/wiki/File:Washington_topographic_map-fr.svg
