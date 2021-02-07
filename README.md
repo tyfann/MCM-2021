@@ -66,10 +66,14 @@
 | $r_i$      | the amount of resource each area will get          |
 | $w_i$      | the weight of i area(importance)                   |
 | isP        | if id is positive, then isP=1, else isP=0          |
+| $\beta$    | base weight for time and space                     |
 |            |                                                    |
 |            |                                                    |
 |            |                                                    |
-|            |                                                    |
+
+## 模型所需要解决的主要问题：
+
+"What strategies can we use to prioritize these public reports for additional investigation given the limited resources of government agencies?"
 
 ## 模型定义：
 
@@ -79,15 +83,15 @@ topographic depends on location, which is related to longitude and latitude.
 
 First, we concern about the evolution of the positive ID's distribution.
 
-<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne3xk50zxj30rd0elasv.jpg width=85%>
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gneyf517cjj30rd0elnhb.jpg width=85%>
 
 <center>Figure 1 positive ID distribution before 2020</center>
 
-<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne41ev84lj30rd0elkbc.jpg width=85%>
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gneyfexgprj30rd0elwzh.jpg width=85%>
 
 <center>Figure 2 positive ID distribution after 2020</center>
 
-<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne55ymfaxj30a907cmx0.jpg width=85%>
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gneyfothx0j30a907cmx0.jpg width=85%>
 
 <center>Figure 3 Detect Date of positive ID</center>
 
@@ -107,15 +111,23 @@ Finally, due to the risk of human being attacked by Vespa mandarinia, we concent
 
 As mentioned above, there are three impact factors, and then we give the interpretation formula(which is the resource distribution formula as well):
 
+when the new reports come, we need to use TTP model to evaluate the priority of each report base on their location and the time when the information detect.
+
+For a new coming report, assume we have the DetectDate $t_d$, latitude $la$ and longitude $lo$ of this report, we can find a postivie ID happened place which is nearest to this location, we calculate the distance $\Delta d$ and DetectDate bias $\Delta t$, 
+
+$p_i =  \frac{\beta}{\Delta t_i * \Delta d_i}$ (when isP=0)
+
+$w_i = isP * (\alpha * \frac{\beta}{\Delta t}) + (1-isP)*(p_i * \alpha) \\= isP * (\alpha * \frac{\beta}{\Delta t}) + (1-isP)*(\frac{\beta}{\Delta t_i * \Delta d_i} * \alpha)$
+
 $\Large r_i = \frac{w_i}{\sum_{i=1}^{n} w_i}$
-
-$w_i = isP * (\alpha * \Delta t* \Delta d) + (1-isP)*(p_i * \alpha)$
-
-$p_i =  \Delta t_i * \Delta d_i$ (when isP=0)
 
 And then we set a loss function which will evaluate the model.Loss function is a finance evaluation model which will evaluate the economics loss of Washington State (contains the agricultural loss and society loss)
 
-$Loss = $
+$Loss = E * (w_b-w_i)$
+
+The resource allocation strategy:
+
+We give the higher weight($w_i$) the prior schedule to give out to the lab to figure out the status.
 
 ## 主要策略：
 
