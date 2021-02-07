@@ -119,17 +119,17 @@ As mentioned above, there are three impact factors, and then we give the interpr
 
 when the new reports come, we need to use TTP model to evaluate the priority of each report base on their location and the time when the information detect.
 
-For a new coming report, assume we have the DetectDate $t_d$, latitude $la$ and longitude $lo$ of this report, we can find a postivie ID happened place which is nearest to this location, we calculate the distance $\Delta d$ and DetectDate bias $\Delta t$, 
+For a new coming report, assume we have the DetectDate $t_d$, latitude $la$ and longitude $$lo$$ of this report, we can find a postivie ID happened place which is nearest to this location, we calculate the distance $$\Delta d$$ and DetectDate bias $$\Delta t$$, 
 
-$p_i =  \frac{\beta}{\Delta t_i * \Delta d_i}$ (when isP=0)
+$$p_i =  \frac{\beta}{\Delta t_i * \Delta d_i}$$ (when isP=0)
 
-$w_i = isP * (\alpha * \frac{\beta}{\Delta t}) + (1-isP)*(p_i * \alpha) \\= isP * (\alpha * \frac{\beta}{\Delta t}) + (1-isP)*(\frac{\beta}{\Delta t_i * \Delta d_i} * \alpha)$
+$$w_i = isP * (\alpha * \frac{\beta}{\Delta t}) + (1-isP)*(p_i * \alpha) \\= isP * (\alpha * \frac{\beta}{\Delta t}) + (1-isP)*(\frac{\beta}{\Delta t_i * \Delta d_i} * \alpha)$$
 
-$\Large r_i = \frac{w_i}{\sum_{i=1}^{n} w_i}$
+$$\Large r_i = \frac{w_i}{\sum_{i=1}^{n} w_i}$$
 
 And then we set a loss function which will evaluate the model.Loss function is a finance evaluation model which will evaluate the economics loss of Washington State (contains the agricultural loss and society loss)
 
-$Loss = E * (w_b-w_i)$
+$$Loss = E * (w_b-w_i)$$
 
 The resource allocation strategy:
 
