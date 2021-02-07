@@ -46,7 +46,6 @@
 
 | symbol     | meaning                                            |
 | ---------- | -------------------------------------------------- |
-| AR         | all resource department owns                       |
 | t          | time effect factor                                 |
 | To         | topographic                                        |
 | Lon        | longitude                                          |
