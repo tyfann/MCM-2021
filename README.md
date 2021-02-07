@@ -40,11 +40,6 @@
 
 
 
-[1] Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[J]. Advances in neural information processing systems, 2012, 25: 1097-1105.
-
-[2] LeCun Y, Bottou L, Bengio Y, et al. Gradient-based learning applied to document recognition[J]. Proceedings of the IEEE, 1998, 86(11): 2278-2324.
-
-
 # TTP Model
 
 ## 符号定义：
@@ -142,8 +137,31 @@ We give the higher weight($w_i$) the prior schedule to give out to the lab to fi
 3. 被判定为Unprocessed的也先忽略，但如果在后续模型判定中Unprocessed的所处的地区是可能需要调配资源的地区的话，需要被纳入考虑范围
 4. 被判定为Unverified的区域，根据模型所给出的权重进行排序，根据排序将剩余的可用资源进行依次调配
 
+# GAN
+
+generative adversarial network (GAN) is a class of machine learning frameworks which could help operator to extend the data set and get more samples for trainning model.[3]
+
+GAN has a generator and discriminator, generator does a job in generating different types of images and discriminator is response for classifying the generative images. They beating each other and learn from this competition, and finally we will get the extensive samples.
+
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gnf7airyubj30go06yaao.jpg width=85%>
+
+<center>figure 1 generator working process</center>
+
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gnf72hufbbj312w0f1abm.jpg width=85%>
+
+<center>figure 2 discriminator working process</center>
+
+
+[1] Krizhevsky A, Sutskever I, Hinton G E. Imagenet classification with deep convolutional neural networks[J]. Advances in neural information processing systems, 2012, 25: 1097-1105.
+
+[2] LeCun Y, Bottou L, Bengio Y, et al. Gradient-based learning applied to document recognition[J]. Proceedings of the IEEE, 1998, 86(11): 2278-2324.
+
+[3] Goodfellow I J, Pouget-Abadie J, Mirza M, et al. Generative adversarial networks[J]. arXiv preprint arXiv:1406.2661, 2014.
+
 
 
 resource website:
 
 https://commons.wikimedia.org/wiki/File:Washington_topographic_map-fr.svg
+
+https://towardsdatascience.com/gan-ways-to-improve-gan-performance-acf37f9f59b
