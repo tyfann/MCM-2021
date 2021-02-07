@@ -75,6 +75,14 @@
 
 "What strategies can we use to prioritize these public reports for additional investigation given the limited resources of government agencies?"
 
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gnf0qb3f5sj310i0rkjuu.jpg width=85%>
+
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gnf0qmu9m6j30y20rygms.jpg width=85%>
+
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gnf0qp6b2mj30zw0rwjt0.jpg width=85%>
+
+<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gnf0qr0qq5j30zo0sgq6f.jpg width=85%>
+
 ## 模型定义：
 
 TTP model is based on variables including time, topographic and population.
@@ -104,8 +112,6 @@ Finally, due to the risk of human being attacked by Vespa mandarinia, we concent
 <img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne3ou9hz0j30jg0b4n0t.jpg width=85%>
 
 
-
-<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne3jkf272j30rd0eldj1.jpg width=85%>
 
 ## Model formula
 
