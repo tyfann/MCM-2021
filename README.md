@@ -42,25 +42,19 @@
 | FC2        | 2048        | None       | None    | None   |
 | FC3        | 1000        | None       | None    | None   |
 
-
-
-
-
-# TTP Model
-
 ## 符号定义：
 
 | symbol     | meaning                                            |
 | ---------- | -------------------------------------------------- |
-| R          | all resource department owns                       |
+| AR         | all resource department owns                       |
 | t          | time effect factor                                 |
 | To         | topographic                                        |
-| lo         | longitude                                          |
-| la         | latitude                                           |
+| Lon        | longitude                                          |
+| Lat        | latitude                                           |
 | Po         | population                                         |
 | $t_d$      | Detect Date                                        |
 | $t_l$      | the latest Date of positive ID detect in this area |
-| p          | possibility of unverified becoming possitive ID    |
+| p          | probability of unverified becoming possitive ID    |
 | $\alpha$   | the enhanced weight of positive ID                 |
 | $\Delta d$ | the distance of two area(space effect factor)      |
 | $\Delta t$ | time bias(should be positive)                      |
@@ -68,27 +62,23 @@
 | $w_i$      | the weight of i area(importance)                   |
 | isP        | if id is positive, then isP=1, else isP=0          |
 | $\beta$    | base weight for time and space                     |
+| R          | Radius of the earth                                |
 |            |                                                    |
 |            |                                                    |
-|            |                                                    |
+
+
+
+
+
+# TLL Model
 
 ## 模型所需要解决的主要问题：
 
 "What strategies can we use to prioritize these public reports for additional investigation given the limited resources of government agencies?"
 
-<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gnf0qb3f5sj310i0rkjuu.jpg width=85%>
+## 模型定义
 
-<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gnf0qmu9m6j30y20rygms.jpg width=85%>
-
-<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gnf0qp6b2mj30zw0rwjt0.jpg width=85%>
-
-<img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gnf0qr0qq5j30zo0sgq6f.jpg width=85%>
-
-## 模型定义：
-
-TTP model is based on variables including time, topographic and population.
-
-topographic depends on location, which is related to longitude and latitude.
+TLL model is  based on variables including time, longitude and latitude
 
 First, we concern about the evolution of the positive ID's distribution.
 
@@ -106,35 +96,65 @@ First, we concern about the evolution of the positive ID's distribution.
 
 we can find from the heat map that positive ID's location is being changed from time to time, so we give time as a factor t, if the latest positive ID detect time is far from current, then t will become less and if the latest positive ID detect time is close to now, then t will become greater which means this place has higher priority to allocate resouce.
 
-Secondly, we find from the paper that Vespa mandarinia typically build their nests inside of natural cavities such as hollow trees and sometimes inside the walls of buildings, so we divide terrain types into four terrains: plateau, mountain, plain and valley. And we give these four types different weights "To".
+## Model formula
 
-Finally, due to the risk of human being attacked by Vespa mandarinia, we concentrate on the population density of Washington state, and we give population as a factor 'Po', 'Po' becomes greater if the place is densely populated.
+As mentioned above, there are three impact factors, and then we give the interpretation formula(which is the resource distribution formula as well):
+
+when the new reports come, we need to use TLL model to evaluate the priority of each report base on their location and the time when the information detect.
+
+For a new coming report, assume we have the DetectDate $t_d$, latitude $Lat_d$ and longitude $Lon_d$ of this report, we can find a postivie ID happened place which is nearest to this location, whose Latitude is $Lat_n$ and Longitude is $Lon_n$, this location's positive happening time is  $t_n$. we calculate the distance $\Delta d$ and DetectDate bias $\Delta t$, 
+
+$\Delta t = t_d - t_n$
+
+$MLat_d = 90 - Lat_d$	$MLat_n = 90 - Lat_n$
+
+$C = sin(MLat_d)* sin(MLat_n) * cos(Lon_d-Lon_n)+cos(MLat_d) * cos(MLat_n)$
+
+$\Delta d = R * Arccos(C) * Pi / 180$
+
+$p_i = \theta *  f(\Delta t) * g(\Delta d)$
+
+$f(\Delta t) = \frac{1}{\Delta t}$	$g(\Delta d) = \frac{1}{\Delta d}$
+
+## 模型缺点
+
+TLL模型仅仅依据了时间和地理位置的距离差异，模型过于简单，最后的优先级次序并不具有很强的说服力，同时容易造成资源分配过于集中在positive周围区域的情况。
+
+# 模型修正 TTLLP Model
+
+## 模型定义：
+
+TTLLP model is based on variables including time, topographic, longitude,  latitude and population, which is an expanded version of the original TLL model.
+
+Topographic depends on location, which is related to longitude and latitude.
+
+We find from the paper that Vespa mandarinia typically build their nests inside of natural cavities such as hollow trees and sometimes inside the walls of buildings, so we divide terrain types into four terrains: plateau, mountain, plain and valley. And we give these four types different weights "To".
+
+And due to the risk of human being attacked by Vespa mandarinia, we concentrate on the population density of Washington state, and we give population as a factor 'Po', 'Po' becomes greater if the place is densely populated.
 
 <img src=https://tva1.sinaimg.cn/large/008eGmZEgy1gne3ou9hz0j30jg0b4n0t.jpg width=85%>
 
-
+And then we set a loss function which will evaluate the model.Loss function is a finance evaluation model which will evaluate the economics loss of Washington State (contains the agricultural loss and society loss)
 
 ## Model formula
 
 As mentioned above, there are three impact factors, and then we give the interpretation formula(which is the resource distribution formula as well):
 
-when the new reports come, we need to use TTP model to evaluate the priority of each report base on their location and the time when the information detect.
+when the new reports come, we need to use TLL model to evaluate the priority of each report base on their location and the time when the information detect.
 
-For a new coming report, assume we have the DetectDate $t_d$, latitude $la$ and longitude $$lo$$ of this report, we can find a postivie ID happened place which is nearest to this location, we calculate the distance $$\Delta d$$ and DetectDate bias $$\Delta t$$, 
+For a new coming report, assume we already have the $\Delta t$ and $\Delta d$ which have been calculated in TLL model. And for this report, we can easily get it's terrain *To* from digital map by inputing it's latitude and longitude, also we can easily get this area's population Po.
 
-$$p_i =  \frac{\beta}{\Delta t_i * \Delta d_i}$$ (when isP=0)
+so we come to the final resource allocation model:
 
-$$w_i = isP * (\alpha * \frac{\beta}{\Delta t}) + (1-isP)*(p_i * \alpha) \\= isP * (\alpha * \frac{\beta}{\Delta t}) + (1-isP)*(\frac{\beta}{\Delta t_i * \Delta d_i} * \alpha)$$
+$p_i = \theta * f(\Delta t) * g(\Delta d) * h(Po) * k(To) $
 
-$$\Large r_i = \frac{w_i}{\sum_{i=1}^{n} w_i}$$
+$h(Po) = \theta_3 * Po$
 
-And then we set a loss function which will evaluate the model.Loss function is a finance evaluation model which will evaluate the economics loss of Washington State (contains the agricultural loss and society loss)
-
-$$Loss = E * (w_b-w_i)$$
+$k(To) = \theta_4 $ if To=='valley' else $k(To) = 1$
 
 The resource allocation strategy:
 
-We give the higher weight($w_i$) the prior schedule to give out to the lab to figure out the status.
+We give the higher probability($p_i$) the prior schedule to give out to the lab to figure out the status.
 
 ## 主要策略：
 
@@ -142,6 +162,7 @@ We give the higher weight($w_i$) the prior schedule to give out to the lab to fi
 2. 被实验室判定为Positive ID的需要重点调配资源(相同时间detect则平均分配，如果时间发生的离现在)
 3. 被判定为Unprocessed的也先忽略，但如果在后续模型判定中Unprocessed的所处的地区是可能需要调配资源的地区的话，需要被纳入考虑范围
 4. 被判定为Unverified的区域，根据模型所给出的权重进行排序，根据排序将剩余的可用资源进行依次调配
+
 
 # GAN
 
